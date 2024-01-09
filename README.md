@@ -1,1 +1,1 @@
-Scrap jobs from Upwork and Fiverr
+List of use cases projects.
