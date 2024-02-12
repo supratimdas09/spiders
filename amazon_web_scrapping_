@@ -1,4 +1,4 @@
-#using selenium because of the dainamic website
+#using selenium because of the dynamic website
 import selenium
 
 #download a software for the testing perpouse or scraping perpouse without this software selenium can not run
