@@ -1,0 +1,44 @@
+#download a software for the testing perpouse or scraping perpouse without this software selenium can not run
+from selenium import webdriver
+
+#using for select the item
+from selenium.webdriver.common.by import By
+
+#using time for how much time the website is open for us
+import time
+
+
+#which browser we want to use in that case i use chrome
+driver = webdriver.Chrome()
+
+#past the website which website we want to scrape
+driver.get("https://www.google.com/maps/@22.626304,88.3818496,13z?entry=ttu")
+driver.maximize_window()
+
+#select the search box for put our searching keywords
+search_box = driver.find_element(By.ID, "searchboxinput")
+search_box.clear()
+
+#put the searching item
+search_box.send_keys("coffee shop")
+
+#click the searching item automatically
+driver.find_element(By.ID, "searchbox-searchbutton").click()
+
+#the browser will be open for the 10sec
+time.sleep(10)
+
+
+# items/coloumns which i want to scrape 
+business_names = []
+business_phone_number = []
+business_website = []
+
+# select the business names from the google map
+name = driver.find_elements(By.XPATH, "//div[@qBF1Pd fontHeadlineSmall ]']") #error
+
+for business_namess in name:
+    business_names.append(name.text)
+
+
+print(len(business_names))
