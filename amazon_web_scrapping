@@ -1,0 +1,82 @@
+#using selenium because of the dainamic website
+import selenium
+
+#download a software for the testing perpouse or scraping perpouse without this software selenium can not run
+from selenium import webdriver
+
+#using for select the item
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+
+#using time for how much time the website is open for us
+import time
+
+#using pandas for saving the file into excel we can also save the file in other extensions
+import pandas as pd
+
+#which browser we want to use in that case i use chrome
+driver = webdriver.Chrome()
+
+#past the website which website we want to scrape
+driver.get("https://www.amazon.in/")
+
+#using for full screen window
+driver.maximize_window()
+
+#select the search box for put our searching keywords
+search_box = driver.find_element(By.ID, "twotabsearchtextbox")
+
+search_box.clear()
+
+#put the searching item
+search_box.send_keys("dell laptops")
+
+#click the searching item automatically
+driver.find_element(By.ID, "nav-search-submit-button").click()
+
+#tick mark the item, in that case i want to select dell brand
+driver.find_element(By.XPATH, "//span[text()='Dell']").click()
+
+# items/coloumns which i want to scrape 
+laptop_names = []
+laptop_prices = []
+laptop_reviews = []
+
+#select the div
+all_product = driver.find_elements(By.XPATH, '//div[@data-component-type="s-search-result"]')
+
+for product in all_product:
+
+#finding the product names
+    names = product.find_elements(By.XPATH, ".//span[@class='a-size-medium a-color-base a-text-normal']")
+    for name in names:
+        laptop_names.append(name.text)
+
+#finding the prices
+    prices = product.find_elements(By.XPATH, ".//span[@class='a-price-whole']")
+    for price in prices:
+        laptop_prices.append(price.text)
+
+#if any review will be 0 then show 0 in file
+    try:
+        reviews = product.find_elements(By.XPATH, ".//span[@class='a-size-base s-underline-text']")
+        if len(reviews) > 0:
+            for review in reviews:
+                laptop_reviews.append(review.text)
+        else:
+            laptop_reviews.append("0")
+    except:
+        pass
+
+
+#print the length of the items
+print("name =", len(laptop_names))
+print("price =", len(laptop_prices))
+print("reviews =", len(laptop_reviews))
+
+#the browser will be open for the 10sec
+time.sleep(10)
+
+#using pandas for store the data as excel file formate
+df = pd.DataFrame(zip(laptop_names, laptop_prices, laptop_reviews), columns = ['laptop_names','laptop_prices','laptop_reviews'])
+df.to_excel(r"D:\MyBuild\live_laptop.xlsx", index=False)
